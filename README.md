@@ -5,14 +5,19 @@
 * docker and docker-compose
 * bash
 
-### Running
+### Instructions
+* There are 3 TODOs in the code in the ./ex-spring-reactive/ folder, complete them in order and run the tests to confirm 
+  they work as required.
+* A completed solution is provided in the ./sln-spring-reactive/ folder.
+
+### Running (once implemented)
 To launch the site with postgres simply run:
 ```shell script
-> gradle bootRun
+> gradle[w] bootRun
 ```
 To run tests:
 ```shell script
-> gradle test
+> gradle[w] test
 ```
 
 To stop the running docker postgres instance:
@@ -21,9 +26,6 @@ To stop the running docker postgres instance:
 ```
 
 Note that postgres persisted data is stored in `./resources/postgres-data` with owner set to the current uid
-
-### Instructions
-* There are 3 TODOs in the code, complete them in order
 
 ### Troubleshooting
 Should there be an issue with docker, you can completely reset your docker environment with:

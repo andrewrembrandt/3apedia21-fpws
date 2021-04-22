@@ -25,15 +25,16 @@ public class OrderService {
   }
 
   public Mono<Void> createOrder(NewOrderDTO dto) {
-    return Mono.empty();
-    // Remove the above return statement, and uncomment the following 3 lines:
-    // val checkedProducts = ensureProducts(dto);
-    // return checkedProducts
-    //     .flatMap(na -> orderRepo.addOrder(dto, ZonedDateTime.now()))
-        // TODO 2 - Then add products for order -  orderProductRepo.addProductsForOrder
-        
-        // TODO 3 - Then check if number of product SKUs match the number of number of products added to the order & 
-        // return a Mono<Void> (Mono.empty or Mono.error) based on this check.
+    val checkedProducts = ensureProducts(dto);
+    return checkedProducts
+        .flatMap(na -> orderRepo.addOrder(dto, ZonedDateTime.now()))
+        .flatMap(orderId -> orderProductRepo.addProductsForOrder(orderId, dto.getProductSkus()))
+        .flatMap(
+            numProductsAddedToOrder -> {
+              if (numProductsAddedToOrder == dto.getProductSkus().size()) return Mono.empty();
+              else return Mono.error(new SkuNotFoundException(dto.toString()));
+            })
+        .then();
   }
 
   private Mono<Boolean> ensureProducts(NewOrderDTO dto) {

@@ -26,7 +26,6 @@ public class OrderProductRepositoryImpl implements OrderProductRepository {
         .all();
   }
 
-  // TODO 1: Complete me - return number of rows
   @Override
   public Mono<Integer> addProductsForOrder(long orderId, List<String> skus) {
     return Flux.fromIterable(skus)
@@ -41,7 +40,7 @@ public class OrderProductRepositoryImpl implements OrderProductRepository {
                   .fetch()
                   .rowsUpdated();
             })
-        // we take the result of flatMap and transform this (with more than one function call) into a Mono<Integer> of 
-        // the number of updated rows.
+        .collectList()
+        .map(numUpdatedList -> numUpdatedList.stream().mapToInt(i -> i).sum());
   }
 }
